@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:product_search/assets/app_colors.dart';
 
 class SearchProductWidget extends StatelessWidget {
   const SearchProductWidget({super.key});
@@ -8,6 +9,7 @@ class SearchProductWidget extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
+      backgroundColor: AppColors.appBackground,
       body: SafeArea(
         child: Padding(
           padding:
@@ -72,6 +74,9 @@ class SearchWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
+              style: TextStyle(
+                color: AppColors.appTextBackground,
+              ),
             ),
           ),
         ),
