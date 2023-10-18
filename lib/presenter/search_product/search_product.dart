@@ -174,9 +174,10 @@ class TextInfoProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      "asdas",
-      style: TextStyle(color: AppColors.appTextBackground, fontSize: 22),
+    final product = SearchProductWidgetProvider.watch(context)?.product;
+    return Text(
+      "${product?.name ?? 'asd'}",
+      style: const TextStyle(color: AppColors.appTextBackground, fontSize: 22),
     );
   }
 }
