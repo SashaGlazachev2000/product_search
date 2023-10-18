@@ -31,15 +31,13 @@ class SearchProductBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageProductWidget(size: width),
+            ImageProductWidget(),
             const SizedBox(height: 20),
             SearchWidget(),
             const SizedBox(height: 20),
@@ -52,25 +50,55 @@ class SearchProductBodyWidget extends StatelessWidget {
 }
 
 class ImageProductWidget extends StatelessWidget {
-  final double size;
-
   const ImageProductWidget({
     super.key,
-    required this.size,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
+    final width = MediaQuery.sizeOf(context).width * 0.9;
+
+    final model = SearchProductWidgetProvider.watch(context);
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      width: width,
+      height: width,
       child: Image.network(
-        "https://ceshops.ru:8443/sem/hs/product_img?code=1980980&index=1",
-        headers: {
-          "code": "22328",
-          "index": "1",
-          "Authorization":
-              "Basic 0JDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA6UHNtbWs5MDEyNA=="
+        model?.httpImage ?? "",
+        headers: model?.headers,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            padding: EdgeInsets.all(100),
+            alignment: Alignment.center,
+            width: double.infinity,
+            height: double.infinity,
+            color: AppColors.appGray,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Icon(
+                Icons.search,
+                size: width,
+                color: AppColors.appBackground,
+              ),
+            ),
+          );
+        },
+        repeat: ImageRepeat.repeatX,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          );
         },
       ),
     );
