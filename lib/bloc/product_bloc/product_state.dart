@@ -7,5 +7,5 @@ class InitialProductState extends ProductState {}
 class LoadedProductState extends ProductState {
   final Product product;
 
-  LoadedProductState({required this.product}) {}
+  LoadedProductState({required this.product});
 }

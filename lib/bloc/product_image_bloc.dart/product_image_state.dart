@@ -8,18 +8,12 @@ class LoadedProductImageState extends ProductImageState {
     "Authorization":
         "Basic 0JDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA6UHNtbWs5MDEyNA=="
   };
+  final bool isActiveNextButton;
+  final bool isActiveBackButton;
 
   LoadedProductImageState({
     required this.httpImage,
+    required this.isActiveNextButton,
+    required this.isActiveBackButton,
   });
-
-  // LoadedProductImageState copyWith({
-  //   String? httpImage,
-  //   Map<String, String>? headers,
-  // }) {
-  //   return LoadedProductImageState(
-  //     httpImage: httpImage ?? this.httpImage,
-  //     headers: headers ?? this.headers,
-  //   );
-  // }
 }

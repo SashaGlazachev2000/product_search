@@ -6,6 +6,8 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
   int _currentIndexImage = 1;
   int _countIndexImage = 0;
   int _codeProduct = 0;
+  bool _isActiveNextButton = true;
+  bool _isActiveBackButton = false;
 
   ProductImageBloc() : super(InitialProductImageState()) {
     on<ImageGetEvent>(_getImage);
@@ -21,7 +23,19 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
     _codeProduct = event.code!;
     _countIndexImage = event.imagesCount;
 
+    if (_countIndexImage == 1) {
+      _isActiveBackButton = false;
+      _isActiveNextButton = false;
+    }
+
+    if (_countIndexImage > 1) {
+      _isActiveBackButton = true;
+      _isActiveNextButton = true;
+    }
+
     final imageState = LoadedProductImageState(
+        isActiveNextButton: _isActiveNextButton,
+        isActiveBackButton: _isActiveBackButton,
         httpImage:
             "https://ceshops.ru:8443/sem/hs/product_img?code=$_codeProduct&index=$_currentIndexImage");
     emit(imageState);
@@ -32,7 +46,14 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
       _currentIndexImage++;
     }
 
+    if (_countIndexImage < _currentIndexImage) {
+      _isActiveNextButton = false;
+      _isActiveBackButton = true;
+    }
+
     final imageState = LoadedProductImageState(
+        isActiveNextButton: _isActiveNextButton,
+        isActiveBackButton: _isActiveBackButton,
         httpImage:
             "https://ceshops.ru:8443/sem/hs/product_img?code=$_codeProduct&index=$_currentIndexImage");
     emit(imageState);
@@ -42,9 +63,15 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
       ImageRemoveEvent event, Emitter<ProductImageState> emit) {
     if (_countIndexImage < _currentIndexImage) {
       _currentIndexImage--;
+      _isActiveNextButton = true;
+    }
+    if (_currentIndexImage == 1) {
+      _isActiveBackButton = false;
     }
 
     final imageState = LoadedProductImageState(
+        isActiveNextButton: _isActiveNextButton,
+        isActiveBackButton: _isActiveBackButton,
         httpImage:
             "https://ceshops.ru:8443/sem/hs/product_img?code=$_codeProduct&index=$_currentIndexImage");
     emit(imageState);
