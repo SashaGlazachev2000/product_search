@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:product_search/entity/store.dart';
 
 class Product {
   Product({
+    // ignore: non_constant_identifier_names
     required this.images_count,
     required this.code,
     required this.barcode,
@@ -22,6 +21,7 @@ class Product {
   final String quality;
   final int amount;
   final int price;
+  // ignore: non_constant_identifier_names
   final int images_count;
   final List<Store> stores;
 

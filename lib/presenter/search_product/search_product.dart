@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
-import 'package:product_search/presenter/search_product/search_product_model.dart';
-
 import 'search_product_bloc.dart';
 
 class SearchProductWidget extends StatelessWidget {
-  SearchProductWidget({super.key});
-
-  final model = SearchProductModel();
+  const SearchProductWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
