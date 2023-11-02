@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
 import 'package:product_search/bloc/product_bloc/product_bloc.dart';
+import 'package:product_search/bloc/product_image_bloc.dart/product_image_bloc.dart';
 import 'package:product_search/view/search_product/image_widget.dart';
 import 'package:product_search/view/search_product/info_widget.dart';
 import 'package:product_search/view/search_product/search_widget.dart';
@@ -11,8 +12,15 @@ class SearchProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProductImageBloc(),
+        ),
+      ],
       child: const Scaffold(
         backgroundColor: AppColors.appBackground,
         body: SearchProductBodyWidget(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
-import 'package:product_search/bloc/product_bloc/product_bloc.dart';
-import 'package:product_search/bloc/product_bloc/product_state.dart';
+import 'package:product_search/bloc/product_image_bloc.dart/product_image_bloc.dart';
+import 'package:product_search/bloc/product_image_bloc.dart/product_image_state.dart';
 import 'package:product_search/widgets/next_back_button.dart';
 
 class ImageProductWidget extends StatelessWidget {
@@ -23,11 +23,13 @@ class ImageProductWidget extends StatelessWidget {
       height: width,
       child: Stack(
         children: [
-          BlocBuilder<ProductBloc, ProductState>(
+          BlocBuilder<ProductImageBloc, ProductImageState>(
             builder: (context, state) {
               return Image.network(
-                state is LoadedProductState ? state.httpImage : "",
-                headers: state is LoadedProductState ? state.headers : {},
+                state is LoadedProductImageState ? state.httpImage : '',
+                headers: state is LoadedProductImageState ? state.headers : {},
+                width: double.infinity,
+                height: double.infinity,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     padding: const EdgeInsets.all(100),
