@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
+import 'package:product_search/bloc/product_bloc.dart';
+import 'package:product_search/bloc/product_event.dart';
+import 'package:product_search/bloc/product_state.dart';
 import 'package:product_search/entity/product.dart';
-import 'search_product_bloc.dart';
 
 class SearchProductWidget extends StatelessWidget {
   const SearchProductWidget({super.key});
@@ -28,6 +30,7 @@ class SearchProductBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,14 +136,18 @@ class SearchWidget extends StatelessWidget {
                 contentPadding: EdgeInsets.all(20),
                 fillColor: AppColors.appTextBackground,
                 filled: true,
-                constraints:
-                    BoxConstraints(maxHeight: 10, minHeight: 10, maxWidth: 10),
+                hintText: 'Введите код',
+                hintStyle: TextStyle(color: AppColors.appGrayHint),
               ),
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
               style: const TextStyle(fontSize: 22),
               onTap: () {
                 controller.text = '';
+              },
+              onSubmitted: (value) {
+                context.read<ProductBloc>().add(ProductGetProductEvent(
+                    code: int.tryParse(controller.text)));
               },
               controller: controller,
             ),
