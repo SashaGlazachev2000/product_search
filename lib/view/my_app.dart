@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:product_search/view/search_product.dart';
+import 'package:product_search/view/search_product/search_product.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:product_search/bloc/product_event.dart';
-import 'package:product_search/bloc/product_state.dart';
+import 'package:product_search/bloc/product_bloc/product_event.dart';
+import 'package:product_search/bloc/product_bloc/product_state.dart';
 import 'package:product_search/services/factory_product.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
