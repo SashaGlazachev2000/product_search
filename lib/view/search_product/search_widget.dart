@@ -50,9 +50,11 @@ class SearchWidget extends StatelessWidget {
               onSubmitted: (value) {
                 context.read<ProductBloc>().add(ProductGetProductEvent(
                     code: int.tryParse(controller.text)));
-                context
-                    .read<ProductImageBloc>()
-                    .add(ImageGetEvent(code: 22303, imagesCount: 1));
+                context.read<ProductImageBloc>().add(
+                      ImageGetEvent(
+                        code: int.tryParse(controller.text),
+                      ),
+                    );
               },
               controller: controller,
             ),
@@ -62,9 +64,15 @@ class SearchWidget extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             context.read<ProductBloc>().add(
-                ProductGetProductEvent(code: int.tryParse(controller.text)));
-            context.read<ProductImageBloc>().add(ImageGetEvent(
-                code: int.tryParse(controller.text), imagesCount: 1));
+                  ProductGetProductEvent(
+                    code: int.tryParse(controller.text),
+                  ),
+                );
+            context.read<ProductImageBloc>().add(
+                  ImageGetEvent(
+                    code: int.tryParse(controller.text),
+                  ),
+                );
           },
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(60, 60),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
+import 'package:product_search/bloc/product_bloc/product_bloc.dart';
+import 'package:product_search/bloc/product_bloc/product_state.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_bloc.dart';
+import 'package:product_search/bloc/product_image_bloc.dart/product_image_event.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_state.dart';
+import 'package:product_search/entity/product.dart';
 import 'package:product_search/widgets/next_back_button.dart';
 
 class ImageProductWidget extends StatelessWidget {
@@ -79,24 +83,41 @@ class ImageProductWidget extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleNextButton(
-                    icon: const Icon(
-                      Icons.arrow_back_sharp,
-                      color: AppColors.appTextBackground,
-                    ),
-                    onTap: () {},
-                  ),
-                  CircleNextButton(
-                    icon: const Icon(
-                      Icons.arrow_forward_sharp,
-                      color: AppColors.appTextBackground,
-                    ),
-                    onTap: () {},
-                  ),
-                ],
+              child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  final Product? product =
+                      state is LoadedProductState ? state.product : null;
+
+                  return product != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CircleNextButton(
+                              icon: const Icon(
+                                Icons.arrow_back_sharp,
+                                color: AppColors.appTextBackground,
+                              ),
+                              onTap: () {
+                                context.read<ProductImageBloc>().add(
+                                      ImageRemoveEvent(),
+                                    );
+                              },
+                            ),
+                            CircleNextButton(
+                              icon: const Icon(
+                                Icons.arrow_forward_sharp,
+                                color: AppColors.appTextBackground,
+                              ),
+                              onTap: () {
+                                context.read<ProductImageBloc>().add(
+                                      ImageAddEvent(),
+                                    );
+                              },
+                            ),
+                          ],
+                        )
+                      : const SizedBox();
+                },
               ),
             ),
           )
