@@ -7,9 +7,8 @@ class LoaderProduct {
 
   Future<Product> fetchProduct(int code) async {
     final response = await _networkClient.fetch(
-      'https://ceshops.ru:8443/sem/hs/product_search?barcode=22303',
+      'https://ceshops.ru:8443/sem/hs/product_search?barcode=$code',
       {
-        "code": "$code",
         "Authorization":
             "Basic 0JDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA6UHNtbWs5MDEyNA==",
       },

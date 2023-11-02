@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
 import 'package:product_search/presenter/search_product/search_product_model.dart';
 
-class SearchProductWidget extends StatefulWidget {
-  const SearchProductWidget({super.key});
+import 'search_product_bloc.dart';
 
-  @override
-  State<SearchProductWidget> createState() => _SearchProductWidgetState();
-}
+class SearchProductWidget extends StatelessWidget {
+  SearchProductWidget({super.key});
 
-class _SearchProductWidgetState extends State<SearchProductWidget> {
   final model = SearchProductModel();
 
   @override
   Widget build(BuildContext context) {
-    return SearchProductWidgetProvider(
-      model: model,
+    return BlocProvider(
+      create: (context) => ProductBloc(),
       child: const Scaffold(
         backgroundColor: AppColors.appBackground,
         body: SearchProductBodyWidget(),
@@ -37,7 +35,7 @@ class SearchProductBodyWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageProductWidget(),
+            const ImageProductWidget(),
             const SizedBox(height: 20),
             SearchWidget(),
             const SizedBox(height: 20),
@@ -58,49 +56,50 @@ class ImageProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width * 0.9;
 
-    final model = SearchProductWidgetProvider.watch(context);
     return Container(
       clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       width: width,
       height: width,
-      child: Image.network(
-        model?.httpImage ?? "",
-        headers: model?.headers,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            padding: EdgeInsets.all(100),
-            alignment: Alignment.center,
-            width: double.infinity,
-            height: double.infinity,
-            color: AppColors.appGray,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Icon(
-                Icons.search,
-                size: width,
-                color: AppColors.appBackground,
+      child: BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
+        return Image.network(
+          state is LoadedProductState ? state.httpImage : "",
+          headers: state is LoadedProductState ? state.headers : {},
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              padding: const EdgeInsets.all(100),
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: double.infinity,
+              color: AppColors.appGray,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Icon(
+                  Icons.search,
+                  size: width,
+                  color: AppColors.appBackground,
+                ),
               ),
-            ),
-          );
-        },
-        repeat: ImageRepeat.repeatX,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
-          }
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
-                  : null,
-            ),
-          );
-        },
-      ),
+            );
+          },
+          repeat: ImageRepeat.repeatX,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 }
@@ -153,8 +152,8 @@ class SearchWidget extends StatelessWidget {
         const SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {
-            SearchProductWidgetProvider.read(context)
-                ?.pushCode(int.tryParse(controller.text));
+            context.read<ProductBloc>().add(
+                ProductGetProductEvent(code: int.tryParse(controller.text)));
           },
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(60, 60),
@@ -174,10 +173,40 @@ class TextInfoProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = SearchProductWidgetProvider.watch(context)?.product;
-    return Text(
-      "${product?.name ?? 'asd'}",
-      style: const TextStyle(color: AppColors.appTextBackground, fontSize: 22),
-    );
+    return BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
+      return Column(
+        children: [
+          Text(
+            state is LoadedProductState ? "Имя: ${state.product.name}" : "",
+            style: const TextStyle(
+                color: AppColors.appTextBackground, fontSize: 22),
+          ),
+          Text(
+            state is LoadedProductState ? "Код: ${state.product.code}" : "",
+            style: const TextStyle(
+                color: AppColors.appTextBackground, fontSize: 22),
+          ),
+          Text(
+            state is LoadedProductState
+                ? "Кол-во: ${state.product.amount}"
+                : "",
+            style: const TextStyle(
+                color: AppColors.appTextBackground, fontSize: 22),
+          ),
+          Text(
+            state is LoadedProductState
+                ? "Сезон: ${state.product.isSeasonal ? 'СЕЗОН' : 'НЕСЕЗОН'}"
+                : "",
+            style: const TextStyle(
+                color: AppColors.appTextBackground, fontSize: 22),
+          ),
+          Text(
+            state is LoadedProductState ? "Цена: ${state.product.price}" : "",
+            style: const TextStyle(
+                color: AppColors.appTextBackground, fontSize: 22),
+          ),
+        ],
+      );
+    });
   }
 }

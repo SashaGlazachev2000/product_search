@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:product_search/entity/store.dart';
 
 class Product {
@@ -13,27 +15,29 @@ class Product {
     required this.stores,
   });
 
-  final int images_count;
+  final String name;
   final int code;
   final int barcode;
-  final String name;
-  final int amount;
-  final double price;
   final bool isSeasonal;
   final String quality;
+  final int amount;
+  final int price;
+  final int images_count;
   final List<Store> stores;
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      images_count: json['images_count'],
-      code: json['code'],
-      barcode: json['barcode'],
-      name: json['name'],
-      amount: json['amount'],
-      price: json['price'],
-      isSeasonal: json['isSeasonal'],
-      quality: json['quality'],
-      stores: json['stores'],
+      name: json['name'] as String,
+      code: json['code'] as int,
+      barcode: json['barcode'] as int,
+      images_count: json['images_count'] as int,
+      isSeasonal: json['isSeasonal'] as bool,
+      quality: json['quality'] as String,
+      amount: json['amount'] as int,
+      price: json['price'] as int,
+      stores: (json['stores'] as List<dynamic>)
+          .map((e) => Store.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
