@@ -23,8 +23,8 @@ class CircleNextButton extends StatelessWidget {
       child: Opacity(
         opacity: isActive ? 1 : 0,
         child: SizedBox(
-          width: 30,
-          height: 30,
+          width: 38,
+          height: 38,
           child: Stack(
             children: [
               Container(
