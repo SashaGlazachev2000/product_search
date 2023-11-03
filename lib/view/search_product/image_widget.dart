@@ -49,7 +49,6 @@ class ImageProductWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    repeat: ImageRepeat.repeatX,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
