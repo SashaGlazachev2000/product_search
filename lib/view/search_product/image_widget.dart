@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/assets/app_colors.dart';
-import 'package:product_search/bloc/product_bloc/product_bloc.dart';
-import 'package:product_search/bloc/product_bloc/product_state.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_bloc.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_event.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_state.dart';
-import 'package:product_search/entity/product.dart';
 import 'package:product_search/widgets/next_back_button.dart';
 
 class ImageProductWidget extends StatelessWidget {

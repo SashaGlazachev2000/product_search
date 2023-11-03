@@ -1,26 +1,44 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:product_search/bloc/product_bloc/product_bloc.dart';
+import 'package:product_search/bloc/product_bloc/product_state.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_event.dart';
 import 'package:product_search/bloc/product_image_bloc.dart/product_image_state.dart';
 
 class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
+  final ProductBloc productBloc;
+  late final StreamSubscription _productBlocSubscription;
   int _currentIndexImage = 1;
   int _countIndexImage = 0;
   int _codeProduct = 0;
   bool _isActiveNextButton = true;
   bool _isActiveBackButton = false;
 
-  ProductImageBloc() : super(InitialProductImageState()) {
+  ProductImageBloc({required this.productBloc})
+      : super(InitialProductImageState()) {
     on<ImageGetEvent>(_getImage);
     on<ImageAddEvent>(_addImageIndex);
     on<ImageRemoveEvent>(_removeImageIndex);
+    _productBlocSubscription = productBloc.stream.listen((state) {
+      if (state is LoadedProductState) {
+        add(
+          ImageGetEvent(
+              imagesCount: state.product.images_count,
+              code: state.product.code),
+        );
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _productBlocSubscription.cancel();
+    return super.close();
   }
 
   void _getImage(ImageGetEvent event, Emitter<ProductImageState> emit) {
-    if (event.code == null) {
-      return;
-    }
-
-    _codeProduct = event.code!;
+    _codeProduct = event.code;
     _countIndexImage = event.imagesCount;
 
     if (_countIndexImage == 1) {
@@ -29,7 +47,6 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
     }
 
     if (_countIndexImage > 1) {
-      _isActiveBackButton = true;
       _isActiveNextButton = true;
     }
 
@@ -42,13 +59,13 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
   }
 
   void _addImageIndex(ImageAddEvent event, Emitter<ProductImageState> emit) {
-    if (_countIndexImage >= _currentIndexImage) {
+    if (_countIndexImage > _currentIndexImage) {
       _currentIndexImage++;
+      _isActiveBackButton = true;
     }
 
-    if (_countIndexImage < _currentIndexImage) {
+    if (_currentIndexImage == _countIndexImage) {
       _isActiveNextButton = false;
-      _isActiveBackButton = true;
     }
 
     final imageState = LoadedProductImageState(
@@ -61,10 +78,11 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
 
   void _removeImageIndex(
       ImageRemoveEvent event, Emitter<ProductImageState> emit) {
-    if (_countIndexImage < _currentIndexImage) {
+    if (_countIndexImage >= _currentIndexImage) {
       _currentIndexImage--;
       _isActiveNextButton = true;
     }
+
     if (_currentIndexImage == 1) {
       _isActiveBackButton = false;
     }

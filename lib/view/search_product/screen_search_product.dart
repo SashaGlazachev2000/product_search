@@ -8,17 +8,18 @@ import 'package:product_search/view/search_product/info_widget.dart';
 import 'package:product_search/view/search_product/search_widget.dart';
 
 class SearchProductWidget extends StatelessWidget {
-  const SearchProductWidget({super.key});
+  SearchProductWidget({super.key});
+  final productBloc = ProductBloc();
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProductBloc(),
+          create: (context) => productBloc,
         ),
         BlocProvider(
-          create: (context) => ProductImageBloc(),
+          create: (context) => ProductImageBloc(productBloc: productBloc),
         ),
       ],
       child: const Scaffold(

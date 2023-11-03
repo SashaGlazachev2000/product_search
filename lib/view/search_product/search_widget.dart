@@ -4,8 +4,6 @@ import 'package:product_search/assets/app_colors.dart';
 import 'package:product_search/bloc/product_bloc/product_bloc.dart';
 import 'package:product_search/bloc/product_bloc/product_event.dart';
 import 'package:product_search/bloc/product_bloc/product_state.dart';
-import 'package:product_search/bloc/product_image_bloc.dart/product_image_bloc.dart';
-import 'package:product_search/bloc/product_image_bloc.dart/product_image_event.dart';
 
 class SearchWidget extends StatelessWidget {
   final controller = TextEditingController();
@@ -56,14 +54,14 @@ class SearchWidget extends StatelessWidget {
                           code: int.tryParse(controller.text),
                         ),
                       );
-                  context.read<ProductImageBloc>().add(
-                        ImageGetEvent(
-                          code: int.tryParse(controller.text),
-                          imagesCount: state is LoadedProductState
-                              ? state.product.images_count
-                              : 1,
-                        ),
-                      );
+                  // context.read<ProductImageBloc>().add(
+                  //       ImageGetEvent(
+                  //         code: int.tryParse(controller.text),
+                  //         imagesCount: state is LoadedProductState
+                  //             ? state.product.images_count
+                  //             : 1,
+                  //       ),
+                  // );
                 },
                 controller: controller,
               ),
@@ -77,14 +75,14 @@ class SearchWidget extends StatelessWidget {
                       code: int.tryParse(controller.text),
                     ),
                   );
-              context.read<ProductImageBloc>().add(
-                    ImageGetEvent(
-                      code: int.tryParse(controller.text),
-                      imagesCount: state is LoadedProductState
-                          ? state.product.images_count
-                          : 1,
-                    ),
-                  );
+              // context.read<ProductImageBloc>().add(
+              //       ImageGetEvent(
+              //         code: int.tryParse(controller.text),
+              //         imagesCount: state is LoadedProductState
+              //             ? state.product.images_count
+              //             : 1,
+              //       ),
+              //     );
             },
             style: ElevatedButton.styleFrom(
               fixedSize: const Size(60, 60),

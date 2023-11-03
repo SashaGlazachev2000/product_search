@@ -4,7 +4,7 @@ import 'package:product_search/bloc/product_bloc/product_state.dart';
 import 'package:product_search/services/factory_product.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final factory = ProductFactory();
+  final _factory = ProductFactory();
 
   ProductBloc() : super(InitialProductState()) {
     on<ProductGetProductEvent>(_loadProduct);
@@ -16,7 +16,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       return;
     }
     final code = event.code;
-    final product = await factory.getProduct(code!);
+    final product = await _factory.getProduct(code!);
     emit(LoadedProductState(product: product));
   }
 }
