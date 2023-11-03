@@ -9,9 +9,9 @@ abstract class AppColors {
   static const Color appGray = Color.fromRGBO(64, 64, 64, 1);
   static const Color appGrayOpacity = Color.fromRGBO(64, 64, 64, 0.5);
   static const Color appGrayHint = Color.fromRGBO(64, 64, 64, 0.5);
+  static const Color appGrayHintInfo = Color.fromRGBO(103, 103, 103, 1);
   static const Color appBlue = Color.fromRGBO(33, 150, 243, 1);
   static const Color appCodeProduct = Color.fromRGBO(189, 216, 166, 1);
   static const Color appStoreProduct = Color.fromRGBO(184, 207, 233, 1);
-  // static const Color appPriceProduct = Color.fromRGBO(248, 223, 218, 1);
-  // static const Color appNameProduct = Color.fromRGBO(246, 242, 248, 1);
+  static const Color appCellInfo = Color.fromRGBO(255, 216, 205, 1);
 }
