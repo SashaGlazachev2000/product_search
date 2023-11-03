@@ -68,6 +68,7 @@ class SearchWidget extends StatelessWidget {
                         code: int.tryParse(controller.text),
                       ),
                     );
+                FocusManager.instance.primaryFocus?.unfocus();
               },
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(60, 60),
