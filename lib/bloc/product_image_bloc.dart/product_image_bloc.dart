@@ -38,6 +38,10 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
   }
 
   void _getImage(ImageGetEvent event, Emitter<ProductImageState> emit) {
+    _currentIndexImage = 1;
+    _isActiveBackButton = false;
+    _isActiveNextButton = true;
+
     _codeProduct = event.code;
     _countIndexImage = event.imagesCount;
 
