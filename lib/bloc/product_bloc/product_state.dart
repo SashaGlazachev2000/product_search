@@ -9,3 +9,5 @@ class LoadedProductState extends ProductState {
 
   LoadedProductState({required this.product});
 }
+
+class ErrorLoadedProductState extends ProductState {}

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_search/bloc/product_bloc/product_bloc.dart';
@@ -20,12 +21,18 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
     on<ImageGetEvent>(_getImage);
     on<ImageAddEvent>(_addImageIndex);
     on<ImageRemoveEvent>(_removeImageIndex);
+    on<ErrorImageEvent>(_errorImageIndex);
     _productBlocSubscription = productBloc.stream.listen((state) {
       if (state is LoadedProductState) {
         add(
           ImageGetEvent(
               imagesCount: state.product.images_count,
               code: state.product.code),
+        );
+      }
+      if (state is ErrorLoadedProductState) {
+        add(
+          ErrorImageEvent(),
         );
       }
     });
@@ -45,7 +52,7 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
     _codeProduct = event.code;
     _countIndexImage = event.imagesCount;
 
-    if (_countIndexImage == 1) {
+    if (_countIndexImage == 1 || _countIndexImage == 0) {
       _isActiveBackButton = false;
       _isActiveNextButton = false;
     }
@@ -54,6 +61,19 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
       _isActiveNextButton = true;
     }
 
+    if (event.code == 0) {
+      final errorImageState = LoadedProductImageState(
+        isActiveNextButton: false,
+        isActiveBackButton: false,
+        httpImage: '',
+      );
+      emit(errorImageState);
+    }
+
+    log('_countIndexImage: $_countIndexImage');
+    log('_currentIndexImage: $_currentIndexImage');
+    log('_isActiveNextButton: $_isActiveNextButton');
+    log('_isActiveBackButton: $_isActiveBackButton');
     final imageState = LoadedProductImageState(
         isActiveNextButton: _isActiveNextButton,
         isActiveBackButton: _isActiveBackButton,
@@ -96,6 +116,17 @@ class ProductImageBloc extends Bloc<ImageEvent, ProductImageState> {
         isActiveBackButton: _isActiveBackButton,
         httpImage:
             "https://ceshops.ru:8443/sem/hs/product_img?code=$_codeProduct&index=$_currentIndexImage");
+    emit(imageState);
+  }
+
+  void _errorImageIndex(
+      ErrorImageEvent event, Emitter<ProductImageState> emit) {
+    final imageState = LoadedProductImageState(
+      isActiveNextButton: false,
+      isActiveBackButton: false,
+      httpImage: '',
+    );
+
     emit(imageState);
   }
 }

@@ -17,3 +17,5 @@ class LoadedProductImageState extends ProductImageState {
     required this.isActiveBackButton,
   });
 }
+
+class ErrorProductImageState extends ProductImageState {}

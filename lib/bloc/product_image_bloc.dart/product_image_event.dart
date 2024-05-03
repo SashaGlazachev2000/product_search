@@ -10,3 +10,5 @@ class ImageGetEvent extends ImageEvent {
 class ImageAddEvent extends ImageEvent {}
 
 class ImageRemoveEvent extends ImageEvent {}
+
+class ErrorImageEvent extends ImageEvent {}
